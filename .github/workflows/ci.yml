@@ -1,25 +1,32 @@
-name: CI
+name: Claude Jira
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ticket_id:
+        description: 'Jira ticket ID (e.g., TASKS-123)'
+        required: true
+        type: string
+      summary:
+        description: 'Ticket summary'
+        required: true
+        type: string
+      description:
+        description: 'Ticket description'
+        required: true
+        type: string
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run tests
-        run: pytest -v
+  implement:
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    uses: virendersinghdogra/claude-workflows/.github/workflows/claude-jira.yml@main
+    with:
+      ticket_id: ${{ inputs.ticket_id }}
+      summary: ${{ inputs.summary }}
+      description: ${{ inputs.description }}
+      install_command: 'pip install uv && uv sync'
+      allowed_tools: 'Read,Edit,Write,Grep,Glob,Bash(uv sync:*),Bash(uv run pytest:*),Bash(git status:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git checkout:*),Bash(git branch:*),Bash(git diff:*),Bash(git log:*)'
+    secrets: inherit
