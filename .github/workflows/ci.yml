@@ -29,4 +29,7 @@ jobs:
       description: ${{ inputs.description }}
       install_command: 'pip install uv && uv sync'
       allowed_tools: 'Read,Edit,Write,Grep,Glob,Bash(uv sync:*),Bash(uv run pytest:*),Bash(git status:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git checkout:*),Bash(git branch:*),Bash(git diff:*),Bash(git log:*)'
-    secrets: inherit
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CI_GITHUB_APP_ID: ${{ secrets.CI_GITHUB_APP_ID }}
+      CI_GITHUB_APP_PRIVATE_KEY: ${{ secrets.CI_GITHUB_APP_PRIVATE_KEY }}
