@@ -22,7 +22,7 @@ jobs:
       contents: write
       pull-requests: write
       id-token: write
-    uses: virendersinghdogra/claude-workflows/.github/workflows/claude-jira.yml@main
+    uses: Juzinn/claude-workflows/.github/workflows/claude-jira.yml@main
     with:
       ticket_id: ${{ inputs.ticket_id }}
       summary: ${{ inputs.summary }}
