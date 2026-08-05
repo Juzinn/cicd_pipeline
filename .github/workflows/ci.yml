@@ -1,5 +1,4 @@
 name: Claude Jira
-
 on:
   workflow_dispatch:
     inputs:
@@ -15,7 +14,8 @@ on:
         description: 'Ticket description'
         required: true
         type: string
-
+  repository_dispatch:
+    types: [jira-in-progress]
 jobs:
   implement:
     permissions:
@@ -24,9 +24,9 @@ jobs:
       id-token: write
     uses: Juzinn/claude-workflows/.github/workflows/claude-jira.yml@main
     with:
-      ticket_id: ${{ inputs.ticket_id }}
-      summary: ${{ inputs.summary }}
-      description: ${{ inputs.description }}
+      ticket_id: ${{ github.event.inputs.ticket_id || github.event.client_payload.issue_key }}
+      summary: ${{ github.event.inputs.summary || github.event.client_payload.issue_summary }}
+      description: ${{ github.event.inputs.description || github.event.client_payload.issue_description }}
       install_command: 'pip install uv && uv sync'
       allowed_tools: 'Read,Edit,Write,Grep,Glob,Bash(uv sync:*),Bash(uv run pytest:*),Bash(git status:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git checkout:*),Bash(git branch:*),Bash(git diff:*),Bash(git log:*)'
     secrets:
